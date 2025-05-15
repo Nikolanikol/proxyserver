@@ -24,6 +24,4 @@ app.get("/api/data", (req, res) => {
 });
 
 // Запуск сервера
-app.listen(PORT, () => {
-  console.log(`Сервер запущен на порту ${PORT}`);
-});
+module.exports.handler = serverless(app);
