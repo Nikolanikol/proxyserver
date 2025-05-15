@@ -24,4 +24,4 @@ app.get("/api/data", (req, res) => {
 });
 
 // Запуск сервера
-module.exports.handler = serverless(app);
+module.exports = serverless(app);
