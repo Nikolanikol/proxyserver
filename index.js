@@ -1,32 +1,14 @@
-// server.js
-const express = require("express");
-const cors = require("cors");
 const axios = require("axios");
-const app = express();
+const cors = require("cors");
+const express = require("express");
 
-const PORT = process.env.PORT || 3000;
-// Подключаем middleware CORS для разрешения кросс-доменных запросов
-app.use(cors());
+const app = new express();
+const PORT = process.env.PORT | 3000;
 
-// Для обработки JSON-тел запросов
-app.use(express.json());
 app.get("/", (req, res) => {
-  res.json({ message: "ok!" });
-});
-// Простой маршрут для проверки работы сервера
-app.get("/getmanga", async (req, res) => {
-  const data = await axios
-    .get(`https://api.mangadex.org/manga`)
-    .then((res) => res.data);
-  res.json(data);
-
-  res.send("Привет! Сервер на Node.js, Express и CORS работает.");
+  res.send("Hello all working");
 });
 
-// Пример дополнительного маршрута
-app.get("/api/data", (req, res) => {
-  res.json({ message: "Это данные с сервера!" });
+app.listen(PORT, () => {
+  console.log("Server started on " + PORT);
 });
-
-// Запуск сервера
-app.listen(PORT, () => console.log("hello start app"));
