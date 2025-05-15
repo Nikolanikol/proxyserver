@@ -3,7 +3,6 @@ const express = require("express");
 const cors = require("cors");
 const serverless = require("serverless-http");
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Подключаем middleware CORS для разрешения кросс-доменных запросов
 app.use(cors());
