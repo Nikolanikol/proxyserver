@@ -15,6 +15,8 @@ app.get("/", (req, res) => {
 });
 // Простой маршрут для проверки работы сервера
 app.get("/hello", (req, res) => {
+  res.json({ message: "ok!" });
+
   res.send("Привет! Сервер на Node.js, Express и CORS работает.");
 });
 
