@@ -4,6 +4,7 @@ const cors = require("cors");
 const serverless = require("serverless-http");
 const app = express();
 
+const PORT = process.env.PORT || 3000;
 // Подключаем middleware CORS для разрешения кросс-доменных запросов
 app.use(cors());
 
@@ -23,4 +24,4 @@ app.get("/api/data", (req, res) => {
 });
 
 // Запуск сервера
-app.listen(process.env.PORT, () => console.log("server started " + PORT));
+app.listen(PORT, () => console.log("server started " + PORT));
