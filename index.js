@@ -23,4 +23,4 @@ app.get("/api/data", (req, res) => {
 });
 
 // Запуск сервера
-app.listen(PORT, () => console.log("server started " + PORT));
+app.listen(process.env.PORT, () => console.log("server started " + PORT));
