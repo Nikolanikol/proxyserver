@@ -53,7 +53,7 @@ app.get("/cover", async (req, res) => {
 app.get("/test", async (req, res) => {
   try {
     const { query: imageUrl } = req.query;
-
+    console.log(imageUrl, "imgUrl");
     if (!imageUrl) {
       return res.status(400).send("Ошибка: Укажите URL изображения");
     }
@@ -64,9 +64,10 @@ app.get("/test", async (req, res) => {
         method: "GET",
         responseType: "stream",
       });
-
+      console.log(response, "response");
       // Передаем изображение клиенту без сохранения
       res.setHeader("Content-Type", response.headers["content-type"]);
+      console.log("header setted");
       response.data.pipe(res);
     } catch (error) {
       console.error("Ошибка получения изображения:", error.message);
