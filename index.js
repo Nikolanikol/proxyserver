@@ -24,13 +24,15 @@ app.get("/", (req, res) => {
 //get mangai tems endpoint
 app.get("/manga/catalog", async (req, res) => {
   const { offset, limit } = req.query;
-  console.log(offset, limit);
+  const includedTags = req.query["includedTags[]"];
+  console.log(offset, limit, includedTags);
   try {
     const responce = await axios
       .get(BASEURL + "/manga", {
         params: {
           offset,
           limit,
+          includedTags: [includedTags],
         },
       })
       .then((res) => res.data);
@@ -112,7 +114,11 @@ app.get("/manga/chapter/:id", async (req, res) => {
   const responce = await axios(BASEURL + "/at-home/server" + "/" + id);
   res.send(responce.data);
 });
+app.get("/tags", async (req, res) => {
+  const responce = await axios(BASEURL + "/manga/tag");
 
+  res.send(responce.data.data);
+});
 app.listen(PORT, () => {
   console.log("Server started on " + PORT);
 });
