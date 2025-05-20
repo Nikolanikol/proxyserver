@@ -23,9 +23,17 @@ app.get("/", (req, res) => {
 });
 //get mangai tems endpoint
 app.get("/manga/catalog", async (req, res) => {
-  const { offset, limit } = req.query;
-  const includedTags = req.query["includedTags[]"];
-  console.log(offset, limit, includedTags);
+  const { offset, limit, createdAtSince, includedTags, contentRating } =
+    req.query;
+
+  console.log(
+    "createdAtSince",
+    createdAtSince,
+    "includedTags",
+    includedTags,
+    "contentRating",
+    contentRating
+  );
   try {
     const responce = await axios
       .get(BASEURL + "/manga", {
@@ -33,12 +41,14 @@ app.get("/manga/catalog", async (req, res) => {
           offset,
           limit,
           includedTags: [includedTags],
+          createdAtSince,
+          contentRating: [contentRating],
         },
       })
       .then((res) => res.data);
     res.send(responce);
   } catch (error) {
-    console.log(error);
+    console.log("ошибка получения каталога");
   }
 });
 //получаем filename
@@ -94,6 +104,7 @@ app.get("/manga/:id", async (req, res) => {
   }
 });
 
+///ПОЛУЧАЕМ СПИСОК ГЛАВ МАНГИ
 app.get("/manga/:id/chapters", async (req, res) => {
   try {
     const { id } = req.params;
@@ -108,17 +119,20 @@ app.get("/manga/:id/chapters", async (req, res) => {
     console.log(error);
   }
 });
+//ПОЛУАЧАЕМ СЛАЙДЫ ДЛЯ МАНГИ ПО ID
 app.get("/manga/chapter/:id", async (req, res) => {
   const { id } = req.params;
 
   const responce = await axios(BASEURL + "/at-home/server" + "/" + id);
   res.send(responce.data);
 });
+/////ЗАГРУДАЕМ ТЕГИ ДЛЯ ПОИСКА МАНГИ
 app.get("/tags", async (req, res) => {
   const responce = await axios(BASEURL + "/manga/tag");
 
   res.send(responce.data.data);
 });
+
 app.listen(PORT, () => {
   console.log("Server started on " + PORT);
 });
