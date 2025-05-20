@@ -3,6 +3,7 @@ const cors = require("cors");
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const { send } = require("process");
 
 const app = new express();
 const PORT = process.env.PORT | 3000;
@@ -23,7 +24,7 @@ app.get("/", (req, res) => {
 });
 //get mangai tems endpoint
 app.get("/manga/catalog", async (req, res) => {
-  const { offset, limit, createdAtSince, includedTags, contentRating } =
+  const { offset, limit, createdAtSince, includedTags, contentRating, title } =
     req.query;
 
   console.log(
@@ -43,6 +44,11 @@ app.get("/manga/catalog", async (req, res) => {
           includedTags: [includedTags],
           createdAtSince,
           contentRating: [contentRating],
+          hasAvailableChapters: 1,
+          order: {
+            relevance: "desc",
+          },
+          title,
         },
       })
       .then((res) => res.data);
@@ -50,6 +56,20 @@ app.get("/manga/catalog", async (req, res) => {
   } catch (error) {
     console.log("ошибка получения каталога");
   }
+});
+
+///получаем тайтлы через поиск
+app.get("/manga/search", async (req, res) => {
+  const { title } = req.query;
+
+  console.log(title);
+
+  const responce = await axios.get(BASEURL + "/manga", {
+    params: {
+      title,
+    },
+  });
+  res.send(responce.data);
 });
 //получаем filename
 app.get("/cover", async (req, res) => {
