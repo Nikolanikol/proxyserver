@@ -8,6 +8,7 @@ const { send } = require("process");
 const app = new express();
 const PORT = process.env.PORT | 3000;
 const BASEURL = `https://api.mangadex.org`;
+const LANG = "en";
 app.use(cors());
 // Определяем путь к папке с загруженными файлами
 const downloadsDir = path.join(__dirname, "downloads");
@@ -44,11 +45,14 @@ app.get("/manga/catalog", async (req, res) => {
           includedTags: [includedTags],
           createdAtSince,
           contentRating: [contentRating],
-          hasAvailableChapters: 1,
+          //   hasAvailableChapters: true,
           order: {
             relevance: "desc",
           },
           title,
+          availableTranslatedLanguage: [LANG],
+
+          //   originalLanguage: ["ja"],
         },
       })
       .then((res) => res.data);
@@ -128,9 +132,11 @@ app.get("/manga/:id", async (req, res) => {
 app.get("/manga/:id/chapters", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log(id);
     const responce = await axios(BASEURL + "/manga" + "/" + id + "/aggregate", {
       params: {
-        translatedLanguage: ["en"],
+        translatedLanguage: [LANG],
+        groups: ["3fa85f64-5717-4562-b3fc-2c963f66afa6"],
       },
     });
 
@@ -141,15 +147,19 @@ app.get("/manga/:id/chapters", async (req, res) => {
 });
 //ПОЛУАЧАЕМ СЛАЙДЫ ДЛЯ МАНГИ ПО ID
 app.get("/manga/chapter/:id", async (req, res) => {
-  const { id } = req.params;
+  try {
+    const { id } = req.params;
+    console.log(id);
 
-  const responce = await axios(BASEURL + "/at-home/server" + "/" + id);
-  res.send(responce.data);
+    const responce = await axios(BASEURL + "/at-home/server" + "/" + id);
+    res.send(responce.data);
+  } catch (error) {
+    console.log(error);
+  }
 });
 /////ЗАГРУДАЕМ ТЕГИ ДЛЯ ПОИСКА МАНГИ
 app.get("/tags", async (req, res) => {
   const responce = await axios(BASEURL + "/manga/tag");
-
   res.send(responce.data.data);
 });
 
